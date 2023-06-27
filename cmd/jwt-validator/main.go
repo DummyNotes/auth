@@ -2,14 +2,16 @@ package main
 
 import (
 	"context"
-	"log"
 	"os"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/dummynotes/notes/internal/jwtauth"
+	"github.com/sirupsen/logrus"
 )
+
+var log = logrus.New()
 
 var KmsJwtKeyID = os.Getenv("KMS_JWT_KEY")
 
@@ -23,11 +25,11 @@ func HandleRequest(ctx context.Context, request events.APIGatewayCustomAuthorize
 
 	claims, err := jwtauth.Validate(awsConfig, KmsJwtKeyID, request.Headers["authorization"])
 	if err != nil {
-		log.Printf("can not parse/verify token %s", err)
+		log.Errorf("can not parse/verify token %s", err)
 		return nil, err
 	}
 
-	log.Printf("Parsed and validated token with claims %v", claims)
+	log.Infof("Parsed and validated token with claims %v", claims)
 
 	responseContext["userid"] = "1233456456"
 
