@@ -3,7 +3,7 @@
 Build:
 
 ```shell
- GOOS=linux GOARCH=amd64 go build -o jwt-validator cmd/jwt-validator/main.go
+GOOS=linux GOARCH=amd64 go build -o jwt-validator cmd/jwt-validator/main.go
 ```
 
 Zip:

@@ -4,15 +4,13 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
+	"os"
 
 	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/service/kms"
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/matelang/jwt-go-aws-kms/v2/jwtkms"
+	"github.com/dummynotes/notes/internal/jwtauth"
 )
 
-const keyID = ""
+var KmsJwtKeyID = os.Getenv("KMS_JWT_KEY")
 
 func main() {
 	awsConfig, err := config.LoadDefaultConfig(context.TODO())
@@ -20,21 +18,12 @@ func main() {
 		panic(err)
 	}
 
-	now := time.Now()
-	jwtToken := jwt.NewWithClaims(jwtkms.SigningMethodECDSA512, &jwt.RegisteredClaims{
-		ExpiresAt: jwt.NewNumericDate(now.Add(1 * time.Hour * 24)),
-		IssuedAt:  jwt.NewNumericDate(now),
-		NotBefore: jwt.NewNumericDate(now),
-	})
-
-	kmsConfig := jwtkms.NewKMSConfig(kms.NewFromConfig(awsConfig), keyID, false)
-
-	str, err := jwtToken.SignedString(kmsConfig.WithContext(context.Background()))
+	jwtToken, err := jwtauth.Generate(awsConfig, KmsJwtKeyID)
 	if err != nil {
-		log.Fatalf("can not sign JWT %s", err)
+		log.Printf("can not sign JWT %s", err)
 	}
 
-	fmt.Println(str)
+	fmt.Println(jwtToken)
 
-	log.Printf("Signed JWT %s\n", str)
+	log.Printf("Signed JWT %s\n", jwtToken)
 }
