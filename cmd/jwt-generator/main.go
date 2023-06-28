@@ -12,7 +12,7 @@ import (
 
 var log = logrus.New()
 
-var KmsJwtKeyID = os.Getenv("KMS_JWT_KEY")
+var KmsJwtKeyID = os.Getenv("KMS_JWT_KEY_ID")
 
 func main() {
 	awsConfig, err := config.LoadDefaultConfig(context.TODO())

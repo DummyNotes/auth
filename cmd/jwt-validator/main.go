@@ -13,7 +13,7 @@ import (
 
 var log = logrus.New()
 
-var KmsJwtKeyID = os.Getenv("KMS_JWT_KEY")
+var KmsJwtKeyID = os.Getenv("KMS_JWT_KEY_ID")
 
 func HandleRequest(ctx context.Context, request events.APIGatewayCustomAuthorizerRequestTypeRequest) (*events.APIGatewayV2CustomAuthorizerSimpleResponse, error) {
 	responseContext := make(map[string]interface{})

@@ -10,13 +10,24 @@ import (
 	"github.com/matelang/jwt-go-aws-kms/v2/jwtkms"
 )
 
+type Claim struct {
+	UserID string `json:"userid"`
+	jwt.RegisteredClaims
+}
+
 func Generate(awsConfig aws.Config, keyID string) (jwtToken string, error error) {
 	now := time.Now()
-	token := jwt.NewWithClaims(jwtkms.SigningMethodECDSA512, &jwt.RegisteredClaims{
-		ExpiresAt: jwt.NewNumericDate(now.Add(1 * time.Hour * 24)),
-		IssuedAt:  jwt.NewNumericDate(now),
-		NotBefore: jwt.NewNumericDate(now),
-	})
+
+	claim := &Claim{
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(now.Add(1 * time.Hour * 24)),
+			IssuedAt:  jwt.NewNumericDate(now),
+			NotBefore: jwt.NewNumericDate(now),
+		},
+		UserID: "123",
+	}
+
+	token := jwt.NewWithClaims(jwtkms.SigningMethodECDSA512, claim)
 
 	kmsConfig := jwtkms.NewKMSConfig(kms.NewFromConfig(awsConfig), keyID, false)
 
