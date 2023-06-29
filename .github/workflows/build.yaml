@@ -1,8 +1,8 @@
 name: Build Auth
 
-on: push
-#  release:
-#    types: [ published ]
+on:
+  release:
+    types: [ published ]
 
 jobs:
   build_jwt_validator:
