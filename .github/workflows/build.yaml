@@ -29,7 +29,7 @@ jobs:
         run: go build ./cmd/jwt-validator
 
       - name: Zip
-        run: zip jwt-validator.zip jwt-validator
+        run: zip jwt-validator-${{ env.RELEASE_VERSION }}.zip jwt-validator
 
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
@@ -39,4 +39,4 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: put object S3
-        run: aws s3 cp ./jwt-validator.zip s3://tiborhercz-github-release-assets/dummynotes/
+        run: aws s3 cp ./jwt-validator-${{ env.RELEASE_VERSION }}.zip s3://tiborhercz-github-release-assets/dummynotes/
