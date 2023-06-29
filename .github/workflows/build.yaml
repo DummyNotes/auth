@@ -22,3 +22,11 @@ jobs:
 
       - name: Zip
         run: zip jwt-validator.zip jwt-validator
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: jwt-validator.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
