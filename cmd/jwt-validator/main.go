@@ -31,10 +31,7 @@ func HandleRequest(ctx context.Context, request events.APIGatewayCustomAuthorize
 
 	log.Infof("Parsed and validated token with claims %v", claims)
 
-	responseContext["userid"] = "1233456456"
-
 	return simpleResponse(true, responseContext), nil
-
 }
 
 func simpleResponse(isAuthorized bool, responseContext map[string]interface{}) *events.APIGatewayV2CustomAuthorizerSimpleResponse {
