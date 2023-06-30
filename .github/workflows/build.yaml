@@ -33,7 +33,7 @@ jobs:
         run: go build ./cmd/jwt-validator-lambda
 
       - name: Zip
-        run: zip jwt-validator-${{ steps.get_version.outputs.VERSION }}.zip jwt-validator
+        run: zip jwt-validator-${{ steps.get_version.outputs.VERSION }}.zip jwt-validator-lambda
 
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
