@@ -30,7 +30,7 @@ jobs:
           go-version: '1.20'
 
       - name: Build
-        run: go build ./cmd/jwt-validator-lambda
+        run: GOOS=linux GOARCH=amd64 go build -o jwt-validator ./cmd/jwt-validator-lambda
 
       - name: Zip
         run: zip jwt-validator-${{ steps.get_version.outputs.VERSION }}.zip jwt-validator-lambda
