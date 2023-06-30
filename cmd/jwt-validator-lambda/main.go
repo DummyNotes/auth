@@ -26,6 +26,9 @@ func HandleRequest(ctx context.Context, request events.APIGatewayCustomAuthorize
 	claims, err := jwtauth.Validate(awsConfig, KmsJwtKeyID, request.Headers["authorization"])
 	if err != nil {
 		log.Errorf("can not parse/verify token %s", err)
+		log.Infof("authorization header: %s", request.Headers["authorization"])
+		log.Infof("KMS_JWT_KEY_ID: %s", KmsJwtKeyID)
+
 		return nil, err
 	}
 
