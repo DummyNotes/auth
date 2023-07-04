@@ -15,9 +15,7 @@ var log = logrus.New()
 
 var KmsJwtKeyID = os.Getenv("KMS_JWT_KEY_ID")
 
-func HandleRequest(ctx context.Context, request events.APIGatewayCustomAuthorizerRequestTypeRequest) (*events.APIGatewayV2CustomAuthorizerSimpleResponse, error) {
-	responseContext := make(map[string]interface{})
-
+func HandleRequest(ctx context.Context, request events.APIGatewayCustomAuthorizerRequestTypeRequest) (events.APIGatewayV2CustomAuthorizerSimpleResponse, error) {
 	awsConfig, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
 		panic(err)
@@ -29,19 +27,16 @@ func HandleRequest(ctx context.Context, request events.APIGatewayCustomAuthorize
 		log.Infof("authorization header: %s", request.Headers["authorization"])
 		log.Infof("KMS_JWT_KEY_ID: %s", KmsJwtKeyID)
 
-		return nil, err
+		return events.APIGatewayV2CustomAuthorizerSimpleResponse{
+			IsAuthorized: false,
+		}, nil
 	}
 
 	log.Infof("Parsed and validated token with claims %v", claims)
 
-	return simpleResponse(true, responseContext), nil
-}
-
-func simpleResponse(isAuthorized bool, responseContext map[string]interface{}) *events.APIGatewayV2CustomAuthorizerSimpleResponse {
-	return &events.APIGatewayV2CustomAuthorizerSimpleResponse{
-		IsAuthorized: isAuthorized,
-		Context:      responseContext,
-	}
+	return events.APIGatewayV2CustomAuthorizerSimpleResponse{
+		IsAuthorized: true,
+	}, nil
 }
 
 func main() {
